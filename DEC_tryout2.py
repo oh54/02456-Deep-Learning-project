@@ -9,9 +9,11 @@ import glob
 from skimage.transform import resize
 from skimage.io import imread
 import tensorflow as tf
-
+import time
 
 # In[16]:
+
+start = time.time()
 
 img_paths = glob.glob("./Kotelet/*/*.png")
 imgs = np.asarray([resize(imread(img), (100, 100), mode='constant').flatten() for img in img_paths])
@@ -72,3 +74,8 @@ c = tf.matmul(a, b)
 sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 # Runs the op.
 print(sess.run(c))
+
+
+end = time.time()
+
+print("Elapsed time: " + str(end-start))
