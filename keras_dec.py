@@ -281,7 +281,7 @@ class DeepEmbeddingClustering(object):
                 self.p = self.p_mat(self.q)
 
                 y_pred = self.q.argmax(1)
-                delta_label = ((y_pred == self.y_pred).sum().astype(np.float32) / y_pred.shape[0])
+                delta_label = ((y_pred != self.y_pred).sum().astype(np.float32) / y_pred.shape[0])
                 if y is not None:
                     acc = self.cluster_acc(y, y_pred)[0]
                     self.accuracy.append(acc)
@@ -289,10 +289,10 @@ class DeepEmbeddingClustering(object):
                 else:
                     print(str(np.round(delta_label*100, 5))+'% change in label assignment')
 
-                if delta_label < tol:
+                if delta_label < tol and iteration >= 10:
                     print('Reached tolerance threshold. Stopping training.')
                     train = False
-                    continue
+                    pass
                 else:
                     self.y_pred = y_pred
 
