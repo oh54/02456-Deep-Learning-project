@@ -14,16 +14,15 @@ from keras.datasets import mnist
 start = time.time()
 
 img_paths = glob.glob("./Kotelet/*/*.png")
-imgs = np.asarray([resize(imread(img), (100, 100), mode='constant').flatten() for img in img_paths])
+imgs = np.asarray([resize(imread(img, as_grey=False), (100, 100), mode='constant').flatten() for img in img_paths])
 print("Shape: " + str(imgs.shape))
 
 
-y = [1 if path[10] == 'N' else 1 for path in img_paths]
+#y = np.asarray([1 if path[10] == 'N' else 2 for path in img_paths])
 
-#c = DeepEmbeddingClustering(n_clusters=10, input_dim=784)
-#c.initialize(X=imgs, finetune_iters=1, layerwise_pretrain_iters=1)
-#c.cluster(X=imgs, Y=y, tol=0.01, update_interval=10, iter_max=100, save_interval=50)
-
+c = DeepEmbeddingClustering(n_clusters=3, input_dim=30000)
+c.initialize(X=imgs, finetune_iters=100, layerwise_pretrain_iters=100)
+c.cluster(X=imgs, update_interval=5, iter_max=100, save_interval=50)
 
 end = time.time()
 
