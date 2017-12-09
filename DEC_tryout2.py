@@ -15,13 +15,13 @@ import time
 
 start = time.time()
 
-img_paths = glob.glob("./Kotelet/*/*.png")
-imgs = np.asarray([resize(imread(img), (100, 100), mode='constant').flatten() for img in img_paths])
+#img_paths = glob.glob("./Kotelet/*/*.png")
+#imgs = np.asarray([resize(imread(img), (100, 100), mode='constant').flatten() for img in img_paths])
 
 
 # In[17]:
 
-print("Shape: " + str(imgs.shape))
+#print("Shape: " + str(imgs.shape))
 
 
 # In[18]:
