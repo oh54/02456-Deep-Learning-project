@@ -286,8 +286,8 @@ class DeepEmbeddingClustering(object):
                     acc = self.cluster_acc(y, y_pred)[0]
                     self.accuracy.append(acc)
                     print('Iteration '+str(iteration)+', Accuracy '+str(np.round(acc, 5)))
-                else:
-                    print(str(np.round(delta_label*100, 5))+'% change in label assignment')
+
+                print(str(np.round(delta_label*100, 5))+'% change in label assignment')
 
                 if delta_label < tol and iteration >= 10:
                     print('Reached tolerance threshold. Stopping training.')

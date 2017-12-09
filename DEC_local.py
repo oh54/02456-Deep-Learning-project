@@ -23,7 +23,7 @@ X, Y = get_mnist()
 
 c = DeepEmbeddingClustering(n_clusters=10, input_dim=784)
 c.initialize(X, finetune_iters=1, layerwise_pretrain_iters=1)
-c.cluster(X, Y, update_interval=100, iter_max=500, save_interval=250)
+c.cluster(X, Y, tol=0.01, update_interval=10, iter_max=100, save_interval=50)
 
 end = time.time()
 
