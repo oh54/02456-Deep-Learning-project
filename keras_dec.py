@@ -292,6 +292,8 @@ class DeepEmbeddingClustering(object):
                 if delta_label < tol and iteration >= 10:
                     print('Reached tolerance threshold. Stopping training.')
                     train = False
+                    self.y_pred = y_pred
+                    return self.y_pred
                     pass
                 else:
                     self.y_pred = y_pred
@@ -327,5 +329,5 @@ class DeepEmbeddingClustering(object):
 
             iteration += 1
             sys.stdout.flush()
-        return
+        return self.y_pred
 
