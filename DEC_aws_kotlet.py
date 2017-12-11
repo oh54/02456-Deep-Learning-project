@@ -37,9 +37,9 @@ y = np.asarray(y_o + y_e)
 #                 cluster_centres=None,
 #                 batch_size=256,
 #
-c = DeepEmbeddingClustering(n_clusters=2, input_dim=10000, batch_size=32)
-c.initialize(X=imgs, finetune_iters=5, layerwise_pretrain_iters=3)
-outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=2, iter_max=10, save_interval=10)
+c = DeepEmbeddingClustering(n_clusters=2, input_dim=10000, batch_size=64)
+c.initialize(X=imgs, finetune_iters=20000, layerwise_pretrain_iters=10000)
+outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=10000, iter_max=1000000, save_interval=10000)
 
 
 print("PREDICTED CLASS 0")
