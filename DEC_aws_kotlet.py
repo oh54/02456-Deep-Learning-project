@@ -45,9 +45,13 @@ outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=10000, iter_max=1000000,
 end = time.time()
 
 print("PREDICTED CLASS 1")
-print(np.asarray(img_paths)[np.where(outp == 1)[0]])
+one_pred = np.asarray(img_paths)[np.where(outp == 1)[0]]
+print(one_pred)
+
+
 print("PREDICTED CLASS 0")
-print(np.asarray(img_paths)[np.where(outp == 0)[0]])
+zero_pred = np.asarray(img_paths)[np.where(outp == 0)[0]]
+print(zero_pred)
 
 print("Elapsed time: " + str(end - start))
 

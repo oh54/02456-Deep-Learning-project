@@ -1,19 +1,20 @@
 
 # coding: utf-8
 
-from keras_dec import DeepEmbeddingClustering
 import numpy as np
 import glob
 import skimage.transform
 from skimage.io import imread
-import tensorflow as tf
-from keras.datasets import mnist
-import matplotlib.pyplot as plt
+#import tensorflow as tf
+#from keras.datasets import mnist
+#import matplotlib.pyplot as plt
 import scipy.misc
-import binascii
+#import binascii
 import string
 import random
-
+import os
+import shutil
+import sys
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
@@ -23,7 +24,17 @@ cut_img_paths = glob.glob("./Kotelet/Cut/*.png")
 glove_img_paths = glob.glob("./Kotelet/Glove/*.png")
 normal_img_paths = glob.glob("./Kotelet/Normal/*.png")
 
-n = 1000
+print("Deleting Kotelet_enhanced/")
+shutil.rmtree("Kotelet_enhanced", ignore_errors=True)
+
+print("Making Kotelet_enhanced/ directories")
+os.makedirs("Kotelet_enhanced/Cut")
+os.makedirs("Kotelet_enhanced/Glove")
+os.makedirs("Kotelet_enhanced/Normal")
+
+n = int(sys.argv[1])
+
+print("Creating additional " + str(n) + " images of each class")
 
 print("Cut images")
 for i in range(0, n):
