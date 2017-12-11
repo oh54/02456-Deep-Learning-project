@@ -6,9 +6,8 @@ import numpy as np
 import glob
 from skimage.transform import resize
 from skimage.io import imread
-import tensorflow as tf
-import matplotlib.pyplot as plt
-from keras.datasets import mnist
+import os
+import shutil
 
 start = time.time()
 
@@ -39,20 +38,39 @@ y = np.asarray(y_o + y_e)
 #                 batch_size=256,
 #
 c = DeepEmbeddingClustering(n_clusters=2, input_dim=10000, batch_size=32)
-c.initialize(X=imgs, finetune_iters=10000, layerwise_pretrain_iters=5000)
-outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=10000, iter_max=1000000, save_interval=10000)
-
-end = time.time()
-
-print("PREDICTED CLASS 1")
-one_pred = np.asarray(img_paths)[np.where(outp == 1)[0]]
-print(one_pred)
+c.initialize(X=imgs, finetune_iters=5, layerwise_pretrain_iters=3)
+outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=2, iter_max=10, save_interval=10)
 
 
 print("PREDICTED CLASS 0")
 zero_pred = np.asarray(img_paths)[np.where(outp == 0)[0]]
-print(zero_pred)
+np.random.shuffle(zero_pred)
+print(zero_pred[0:20])
 
+print("PREDICTED CLASS 1")
+one_pred = np.asarray(img_paths)[np.where(outp == 1)[0]]
+np.random.shuffle(one_pred)
+print(one_pred[0:20])
+
+shutil.rmtree("Class1_images", ignore_errors=True)
+shutil.rmtree("Class0_images", ignore_errors=True)
+os.makedirs("Class1_images")
+os.makedirs("Class0_images")
+
+save_img_count=20
+i = 0
+for path in zero_pred[0:save_img_count]:
+    shutil.copyfile(path, "Class0_images/class0_" + str(i) + ".png")
+    i += 1
+
+i = 0
+for path in one_pred[0:save_img_count]:
+    shutil.copyfile(path, "Class1_images/class1_" + str(i) + ".png")
+    i += 1
+
+end = time.time()
 print("Elapsed time: " + str(end - start))
+
+
 
 
