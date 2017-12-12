@@ -271,14 +271,14 @@ class DeepEmbeddingClustering(object):
         while train:
             sys.stdout.write('\r')
             # cutoff iteration
-            if iter_max < iteration:
+            if iter_max >= 1 and iter_max < iteration:
                 print('Reached maximum iteration limit. Stopping training.')
                 #return self.y_pred
                 return self.q
 
             # update (or initialize) probability distributions and propagate weight changes
             # from DEC model to encoder.
-            if iteration % update_interval == 0:
+            if iter_max == 0 or iteration % update_interval == 0:
                 self.q = self.DEC.predict(X, verbose=0)
 
                 #print(self.q)
@@ -296,7 +296,7 @@ class DeepEmbeddingClustering(object):
 
                 print(str(np.round(delta_label*100, 5))+'% change in label assignment')
 
-                if delta_label < tol and iteration >= 10:
+                if delta_label < tol and iteration >= 1 or iter_max == 0 :
                     print('Reached tolerance threshold. Stopping training.')
                     train = False
                     self.y_pred = y_pred
