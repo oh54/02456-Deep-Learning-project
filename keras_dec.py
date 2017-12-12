@@ -66,7 +66,8 @@ class ClusteringLayer(Layer):
     def call(self, x, mask=None):
         q = 1.0/(1.0 + K.sqrt(K.sum(K.square(K.expand_dims(x, 1) - self.W), axis=2))**2 /self.alpha)
         q = q**((self.alpha+1.0)/2.0)
-        q = K.transpose(K.transpose(q)/K.sum(q, axis=1))
+        q = K.transpose(K.transpose(q))
+        # /K.sum(q, axis=1)
         return q
 
     def get_output_shape_for(self, input_shape):
@@ -278,6 +279,11 @@ class DeepEmbeddingClustering(object):
             # from DEC model to encoder.
             if iteration % update_interval == 0:
                 self.q = self.DEC.predict(X, verbose=0)
+
+                #print(self.q)
+                print("Max prob: " + str(np.amax(self.q)))
+                print("Min prob: " + str(np.amin(self.q)))
+
                 self.p = self.p_mat(self.q)
 
                 y_pred = self.q.argmax(1)

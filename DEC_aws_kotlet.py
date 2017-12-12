@@ -1,7 +1,9 @@
 from keras.datasets import mnist
 import numpy as np
 import time
-from keras_dec import DeepEmbeddingClustering
+import keras_dec
+import importlib
+importlib.reload(keras_dec)
 import numpy as np
 import glob
 from skimage.transform import resize
@@ -17,7 +19,7 @@ normals_o = glob.glob("./Kotelet/Normal/*.png")
 cuts_e = glob.glob("./Kotelet_enhanced/Cut/*.png")
 normals_e = glob.glob("./Kotelet_enhanced/Normal/*.png")
 
-img_paths_o = cuts_o + normals_o 
+img_paths_o = cuts_o + normals_o
 img_paths_e = cuts_e + normals_e
 img_paths = img_paths_o + img_paths_e
 
@@ -37,20 +39,20 @@ y = np.asarray(y_o + y_e)
 #                 cluster_centres=None,
 #                 batch_size=256,
 #
-c = DeepEmbeddingClustering(n_clusters=2, input_dim=10000, batch_size=64)
-c.initialize(X=imgs, finetune_iters=20000, layerwise_pretrain_iters=10000)
+c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=10000, batch_size=64)
+c.initialize(X=imgs, finetune_iters=100000, layerwise_pretrain_iters=50000)
 outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=10000, iter_max=1000000, save_interval=10000)
 
 
 print("PREDICTED CLASS 0")
 zero_pred = np.asarray(img_paths)[np.where(outp == 0)[0]]
 np.random.shuffle(zero_pred)
-print(zero_pred[0:20])
+#print(zero_pred[0:20])
 
 print("PREDICTED CLASS 1")
 one_pred = np.asarray(img_paths)[np.where(outp == 1)[0]]
 np.random.shuffle(one_pred)
-print(one_pred[0:20])
+#print(one_pred[0:20])
 
 shutil.rmtree("Class1_images", ignore_errors=True)
 shutil.rmtree("Class0_images", ignore_errors=True)
