@@ -16,21 +16,19 @@ start = time.time()
 #img_paths = glob.glob("./Kotelet/*/*.png")
 cuts_o = glob.glob("./Kotelet/Cut/*.png")
 normals_o = glob.glob("./Kotelet/Normal/*.png")
-#cuts_e = glob.glob("./Kotelet_enhanced/Cut/*.png")
-#normals_e = glob.glob("./Kotelet_enhanced/Normal/*.png")
+cuts_e = glob.glob("./Kotelet_enhanced/Cut/*.png")
+normals_e = glob.glob("./Kotelet_enhanced/Normal/*.png")
 
 img_paths_o = cuts_o + normals_o
-#img_paths_e = cuts_e + normals_e
-#img_paths = img_paths_o + img_paths_e
-img_paths = img_paths_o
+img_paths_e = cuts_e + normals_e
+img_paths = img_paths_o + img_paths_e
 
-imgs = np.asarray([resize(imread(img, as_grey=True), (100, 100), mode='constant').flatten() for img in img_paths])
+imgs = np.asarray([resize(imread(img, as_grey=True), (60, 60), mode='constant').flatten() for img in img_paths])
 print("Shape: " + str(imgs.shape))
 
 y_o = [0 if path[10] == 'N' else 1 for path in img_paths_o]
-#y_e = [0 if path[19] == 'N' else 1 for path in img_paths_e]
-#y = np.asarray(y_o + y_e)
-y = np.asarray(y_o)
+y_e = [0 if path[19] == 'N' else 1 for path in img_paths_e]
+y = np.asarray(y_o + y_e)
 
 #n_clusters,
 #                 input_dim,
@@ -46,35 +44,37 @@ c.initialize(X=imgs, finetune_iters=100000, layerwise_pretrain_iters=50000)
 outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=10000, iter_max=1000000, save_interval=10000)
 
 
-print("PREDICTED CLASS 0")
-zero_pred = np.asarray(img_paths)[np.where(outp == 0)[0]]
-np.random.shuffle(zero_pred)
+#print("PREDICTED CLASS 0")
+#zero_pred = np.asarray(img_paths)[np.where(outp == 0)[0]]
+#np.random.shuffle(zero_pred)
 #print(zero_pred[0:20])
 
-print("PREDICTED CLASS 1")
-one_pred = np.asarray(img_paths)[np.where(outp == 1)[0]]
-np.random.shuffle(one_pred)
+#print("PREDICTED CLASS 1")
+#one_pred = np.asarray(img_paths)[np.where(outp == 1)[0]]
+#np.random.shuffle(one_pred)
 #print(one_pred[0:20])
 
-shutil.rmtree("Class1_images", ignore_errors=True)
-shutil.rmtree("Class0_images", ignore_errors=True)
-os.makedirs("Class1_images")
-os.makedirs("Class0_images")
-
 save_img_count=20
-i = 0
-for path in zero_pred[0:save_img_count]:
-    shutil.copyfile(path, "Class0_images/class0_" + str(i) + ".png")
-    i += 1
 
-i = 0
-for path in one_pred[0:save_img_count]:
-    shutil.copyfile(path, "Class1_images/class1_" + str(i) + ".png")
-    i += 1
+
+args = np.argsort(outp, axis=0).flatten()
+
+worst = args[0:save_img_count-1]
+best = args[-save_img_count-1:]
+
+
+def save_imgs(probs, paths, dir):
+    shutil.rmtree(dir, ignore_errors=True)
+    os.makedirs(dir)
+    i = 0
+    for path in paths[0:save_img_count-1]:
+        #print(path)
+        shutil.copyfile(path, dir + "/" + path[10] + "_" + str(probs[i]) + ".png")
+        i += 1
+    return
+
+save_imgs(outp[worst].flatten(), np.asarray(img_paths)[worst], "Worst")
+save_imgs(outp[best].flatten(), np.asarray(img_paths)[best], "Best")
 
 end = time.time()
 print("Elapsed time: " + str(end - start))
-
-
-
-

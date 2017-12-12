@@ -273,7 +273,8 @@ class DeepEmbeddingClustering(object):
             # cutoff iteration
             if iter_max < iteration:
                 print('Reached maximum iteration limit. Stopping training.')
-                return self.y_pred
+                #return self.y_pred
+                return self.q
 
             # update (or initialize) probability distributions and propagate weight changes
             # from DEC model to encoder.
@@ -299,7 +300,8 @@ class DeepEmbeddingClustering(object):
                     print('Reached tolerance threshold. Stopping training.')
                     train = False
                     self.y_pred = y_pred
-                    return self.y_pred
+                    #return self.y_pred
+                    return self.q
                     pass
                 else:
                     self.y_pred = y_pred
@@ -335,5 +337,5 @@ class DeepEmbeddingClustering(object):
 
             iteration += 1
             sys.stdout.flush()
-        return self.y_pred
-
+        #return self.y_pred
+        return self.q
