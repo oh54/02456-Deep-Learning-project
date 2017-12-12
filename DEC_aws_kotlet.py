@@ -43,7 +43,7 @@ y = np.asarray(y_o)
 #
 c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, batch_size=64)
 c.initialize(X=imgs, finetune_iters=10000, layerwise_pretrain_iters=5000)
-outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=10000, iter_max=1000000, save_interval=10000)
+outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0)
 
 
 #print("PREDICTED CLASS 0")
