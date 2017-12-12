@@ -24,13 +24,13 @@ cut_img_paths = glob.glob("./Kotelet/Cut/*.png")
 glove_img_paths = glob.glob("./Kotelet/Glove/*.png")
 normal_img_paths = glob.glob("./Kotelet/Normal/*.png")
 
-print("Deleting Kotelet_enhanced/")
-shutil.rmtree("Kotelet_enhanced", ignore_errors=True)
+print("Deleting Kotelee/")
+shutil.rmtree("Kotelee", ignore_errors=True)
 
-print("Making Kotelet_enhanced/ directories")
-os.makedirs("Kotelet_enhanced/Cut")
-os.makedirs("Kotelet_enhanced/Glove")
-os.makedirs("Kotelet_enhanced/Normal")
+print("Making Kotelee directories")
+os.makedirs("Kotelee/Cut")
+os.makedirs("Kotelee/Glove")
+os.makedirs("Kotelee/Normal")
 
 n = int(sys.argv[1])
 
@@ -43,7 +43,7 @@ for i in range(0, n):
     random_center = (np.random.rand(1,2)-0.5)*50 + (200,200)
     rotated = skimage.transform.rotate(imread(selected[0]), angle=random_angle[0][0], resize=False,center=random_center[0])
     name = id_generator(25)
-    scipy.misc.imsave('Kotelet_enhanced/Cut/' + name + '.png', rotated)
+    scipy.misc.imsave('Kotelee/Cut/' + name + '.png', rotated)
     # print("Iter nr: " + str(i))
 
 print("Glove images")
@@ -53,7 +53,7 @@ for i in range(0, n):
     random_center = (np.random.rand(1,2)-0.5)*50 + (200,200)
     rotated = skimage.transform.rotate(imread(selected[0]), angle=random_angle[0][0], resize=False,center=random_center[0])
     name = id_generator(25)
-    scipy.misc.imsave('Kotelet_enhanced/Glove/' + name + '.png', rotated)
+    scipy.misc.imsave('Kotelee/Glove/' + name + '.png', rotated)
     # print("Iter nr: " + str(i))
     
 print("Normal images")
@@ -63,7 +63,7 @@ for i in range(0, n):
     random_center = (np.random.rand(1,2)-0.5)*50 + (200,200)
     rotated = skimage.transform.rotate(imread(selected[0]), angle=random_angle[0][0], resize=False,center=random_center[0])
     name = id_generator(25)
-    scipy.misc.imsave('Kotelet_enhanced/Normal/' + name + '.png', rotated)
+    scipy.misc.imsave('Kotelee/Normal/' + name + '.png', rotated)
     # print("Iter nr: " + str(i))
 print('Done!')
 

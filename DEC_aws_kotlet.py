@@ -16,21 +16,21 @@ start = time.time()
 #img_paths = glob.glob("./Kotelet/*/*.png")
 cuts_o = glob.glob("./Kotelet/Cut/*.png")
 normals_o = glob.glob("./Kotelet/Normal/*.png")
-#cuts_e = glob.glob("./Kotelet_enhanced/Cut/*.png")
-#normals_e = glob.glob("./Kotelet_enhanced/Normal/*.png")
+cuts_e = glob.glob("./Kotelee/Cut/*.png")
+normals_e = glob.glob("./Kotelee/Normal/*.png")
 
 img_paths_o = cuts_o + normals_o
-#img_paths_e = cuts_e + normals_e
-#img_paths = img_paths_o + img_paths_e
-img_paths = img_paths_o
+img_paths_e = cuts_e + normals_e
+img_paths = img_paths_o + img_paths_e
+#img_paths = img_paths_o
 
 imgs = np.asarray([resize(imread(img, as_grey=True), (60, 60), mode='constant').flatten() for img in img_paths])
 print("Shape: " + str(imgs.shape))
 
 y_o = [0 if path[10] == 'N' else 1 for path in img_paths_o]
-#y_e = [0 if path[19] == 'N' else 1 for path in img_paths_e]
-#y = np.asarray(y_o + y_e)
-y = np.asarray(y_o)
+y_e = [0 if path[10] == 'N' else 1 for path in img_paths_e]
+y = np.asarray(y_o + y_e)
+#y = np.asarray(y_o)
 
 #n_clusters,
 #                 input_dim,
