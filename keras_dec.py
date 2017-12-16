@@ -288,10 +288,10 @@ class DeepEmbeddingClustering(object):
 
                 self.p = self.p_mat(self.q)
 
-                if (self.n_clusters > 1):
-                    y_pred = self.q.argmax(1)
-                else:
-                    y_pred = np.asarray([1 if x[0] >= cutoff else 0 for x in self.q])
+                #if (self.n_clusters > 1):
+                y_pred = self.q.argmax(1)
+                #else:
+                #    y_pred = np.asarray([1 if x[0] >= cutoff else 0 for x in self.q])
 
                 #print("PROBS")
                 #print(self.q)

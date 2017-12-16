@@ -16,15 +16,20 @@ start = time.time()
 #img_paths = glob.glob("./Kotelet/*/*.png")
 cuts_o = glob.glob("./Kotelet/Cut/*.png")
 normals_o = glob.glob("./Kotelet/Normal/*.png")
+gloves_o = glob.glob("./Kotelet/Glove/*.png")
 cuts_e = glob.glob("./Kotelee/Cut/*.png")
 normals_e = glob.glob("./Kotelee/Normal/*.png")
+gloves_e = glob.glob("./Kotelee/Glove/*.png")
 
-img_paths_o = cuts_o + normals_o
-img_paths_e = cuts_e + normals_e
+img_paths_o = cuts_o + normals_o + gloves_o
+img_paths_e = cuts_e + normals_e + gloves_e
 img_paths = img_paths_o + img_paths_e
-#img_paths = img_paths_o
 
-imgs = np.asarray([resize(imread(img, as_grey=True), (60, 60), mode='constant').flatten() for img in img_paths])
+greyscale = False
+dim = 60
+dim_flat = dim*dim if greyscale else dim*dim*3
+
+imgs = np.asarray([resize(imread(img, as_grey=greyscale), (dim, dim), mode='constant').flatten() for img in img_paths])
 print("Shape: " + str(imgs.shape))
 
 y_o = [0 if path[10] == 'N' else 1 for path in img_paths_o]
@@ -48,9 +53,10 @@ y = np.asarray(y_o + y_e)
 #probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
 
 
-c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, alpha=1.0, batch_size=32)
+
+c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=dim_flat, alpha=1.0, batch_size=32)
 c.initialize(X=imgs, finetune_iters=200, layerwise_pretrain_iters=100)
-probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
+probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0)
 
 probs = probs_preds[0]
 preds = probs_preds[1]
@@ -80,7 +86,7 @@ args = np.argsort(probs, axis=0).flatten()
 worst = args[0:save_img_count-1]
 best = args[-save_img_count-1:]
 
-
+"""
 def save_imgs(probs, paths, dir):
     shutil.rmtree(dir, ignore_errors=True)
     os.makedirs(dir)
@@ -93,7 +99,7 @@ def save_imgs(probs, paths, dir):
 
 save_imgs(probs[worst].flatten(), np.asarray(img_paths)[worst], "Worst")
 save_imgs(probs[best].flatten(), np.asarray(img_paths)[best], "Best")
-
+"""
 
 end = time.time()
 print("Elapsed time: " + str(end - start))
