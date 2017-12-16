@@ -8,7 +8,7 @@ source activate tensorflow_p36
 
 #python3.6 DEC_local_kotlet.py 2>&1 > some_log
 
-#python3.6 Rotation_and_shifting.py 50 2>&1 > some_log
+#python3.6 Rotation_and_shifting.py 10 2>&1 > some_log
 python3.6 DEC_aws_kotlet.py 2>&1 > some_log
 
 # use 'nohup ./run_aws.sh &' to run this file and
