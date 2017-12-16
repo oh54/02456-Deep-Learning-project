@@ -43,31 +43,38 @@ y = np.asarray(y_o + y_e)
 #
 
 # AWS
-#c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, batch_size=64)
+#c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, alpha=1.0, batch_size=64)
 #c.initialize(X=imgs, finetune_iters=10000, layerwise_pretrain_iters=5000)
-#outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0)
+#probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
 
 
 c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, alpha=1.0, batch_size=32)
 c.initialize(X=imgs, finetune_iters=200, layerwise_pretrain_iters=100)
-outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
+probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
+
+probs = probs_preds[0]
+preds = probs_preds[1]
 
 
+def find_best_cutoff(probs, y):
+    best_acc = 0
+    best_cutoff = 0
+    for cutoff_int in range(1, 101, 1):
+        cutoff = cutoff_int / 100
 
-#print("PREDICTED CLASS 0")
-#zero_pred = np.asarray(img_paths)[np.where(outp == 0)[0]]
-#np.random.shuffle(zero_pred)
-#print(zero_pred[0:20])
+        cutoff_preds = np.asarray([1 if x[0] >= cutoff else 0 for x in probs])
+        cutoff_acc = sum(cutoff_preds == y) / len(y)
+        best_acc = cutoff_acc if cutoff_acc > best_acc else best_acc
+        best_cutoff = cutoff if cutoff_acc > best_acc else best_cutoff
 
-#print("PREDICTED CLASS 1")
-#one_pred = np.asarray(img_paths)[np.where(outp == 1)[0]]
-#np.random.shuffle(one_pred)
-#print(one_pred[0:20])
+    print("best acc: " + str(best_acc))
+    print("best cutoff: " + str(best_cutoff))
+
+find_best_cutoff(probs, y)
 
 save_img_count=20
 
-
-args = np.argsort(outp, axis=0).flatten()
+"""args = np.argsort(probs, axis=0).flatten()
 
 worst = args[0:save_img_count-1]
 best = args[-save_img_count-1:]
@@ -83,8 +90,9 @@ def save_imgs(probs, paths, dir):
         i += 1
     return
 
-save_imgs(outp[worst].flatten(), np.asarray(img_paths)[worst], "Worst")
-save_imgs(outp[best].flatten(), np.asarray(img_paths)[best], "Best")
+save_imgs(probs[worst].flatten(), np.asarray(img_paths)[worst], "Worst")
+save_imgs(probs[best].flatten(), np.asarray(img_paths)[best], "Best")
+"""
 
 end = time.time()
 print("Elapsed time: " + str(end - start))

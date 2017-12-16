@@ -293,11 +293,11 @@ class DeepEmbeddingClustering(object):
                 else:
                     y_pred = np.asarray([1 if x[0] >= cutoff else 0 for x in self.q])
 
-                print("PROBS")
-                print(self.q)
+                #print("PROBS")
+                #print(self.q)
 
-                print("PREDS")
-                print(y_pred)
+                #print("PREDS")
+                #print(y_pred)
 
                 delta_label = ((y_pred != self.y_pred).sum().astype(np.float32) / y_pred.shape[0])
                 if y is not None:
@@ -308,11 +308,11 @@ class DeepEmbeddingClustering(object):
                 print(str(np.round(delta_label*100, 5))+'% change in label assignment')
 
                 if delta_label < tol and iteration >= 1 or iter_max == 0 :
-                    print('Reached tolerance threshold. Stopping training.')
+                    print('Reached tolerance threshold or iter_max == 0. Stopping training.')
                     train = False
                     self.y_pred = y_pred
                     #return self.y_pred
-                    return self.q
+                    return (self.q, self.y_pred)
                     pass
                 else:
                     self.y_pred = y_pred
