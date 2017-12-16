@@ -57,7 +57,7 @@ for i in range(0, n):
     # print("Iter nr: " + str(i))
     
 print("Normal images")
-for i in range(0, n):
+for i in range(0, n*10):
     selected = np.random.choice(normal_img_paths,1)
     random_angle = (np.random.rand(1,1)-0.5)*360
     random_center = (np.random.rand(1,2)-0.5)*50 + (200,200)
