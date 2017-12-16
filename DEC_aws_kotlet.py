@@ -48,15 +48,14 @@ y = np.asarray(y_o + y_e)
 #
 
 # AWS
-#c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, alpha=1.0, batch_size=64)
-#c.initialize(X=imgs, finetune_iters=10000, layerwise_pretrain_iters=5000)
-#probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
+c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=dim_flat, alpha=1.0, batch_size=64)
+c.initialize(X=imgs, finetune_iters=10000, layerwise_pretrain_iters=5000)
+probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
 
 
-
-c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=dim_flat, alpha=1.0, batch_size=32)
-c.initialize(X=imgs, finetune_iters=200, layerwise_pretrain_iters=100)
-probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0)
+#c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=dim_flat, alpha=1.0, batch_size=32)
+#c.initialize(X=imgs, finetune_iters=200, layerwise_pretrain_iters=100)
+#probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0)
 
 probs = probs_preds[0]
 preds = probs_preds[1]
@@ -86,7 +85,7 @@ args = np.argsort(probs, axis=0).flatten()
 worst = args[0:save_img_count-1]
 best = args[-save_img_count-1:]
 
-"""
+
 def save_imgs(probs, paths, dir):
     shutil.rmtree(dir, ignore_errors=True)
     os.makedirs(dir)
@@ -99,7 +98,7 @@ def save_imgs(probs, paths, dir):
 
 save_imgs(probs[worst].flatten(), np.asarray(img_paths)[worst], "Worst")
 save_imgs(probs[best].flatten(), np.asarray(img_paths)[best], "Best")
-"""
+
 
 end = time.time()
 print("Elapsed time: " + str(end - start))
