@@ -250,6 +250,7 @@ class DeepEmbeddingClustering(object):
                 tol=0.01, update_interval=None,
                 iter_max=1e6,
                 save_interval=None,
+                cutoff=0.5,
                 **kwargs):
 
         if update_interval is None:
@@ -282,12 +283,22 @@ class DeepEmbeddingClustering(object):
                 self.q = self.DEC.predict(X, verbose=0)
 
                 #print(self.q)
-                print("Max prob: " + str(np.amax(self.q)))
-                print("Min prob: " + str(np.amin(self.q)))
+                #print("Max prob: " + str(np.amax(self.q)))
+                #print("Min prob: " + str(np.amin(self.q)))
 
                 self.p = self.p_mat(self.q)
 
-                y_pred = self.q.argmax(1)
+                if (self.n_clusters > 1):
+                    y_pred = self.q.argmax(1)
+                else:
+                    y_pred = np.asarray([1 if x[0] >= cutoff else 0 for x in self.q])
+
+                print("PROBS")
+                print(self.q)
+
+                print("PREDS")
+                print(y_pred)
+
                 delta_label = ((y_pred != self.y_pred).sum().astype(np.float32) / y_pred.shape[0])
                 if y is not None:
                     acc = self.cluster_acc(y, y_pred)[0]

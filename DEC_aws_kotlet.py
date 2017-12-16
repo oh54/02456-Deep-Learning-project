@@ -41,9 +41,17 @@ y = np.asarray(y_o + y_e)
 #                 cluster_centres=None,
 #                 batch_size=256,
 #
-c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, batch_size=64)
-c.initialize(X=imgs, finetune_iters=10000, layerwise_pretrain_iters=5000)
-outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0)
+
+# AWS
+#c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, batch_size=64)
+#c.initialize(X=imgs, finetune_iters=10000, layerwise_pretrain_iters=5000)
+#outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0)
+
+
+c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=3600, alpha=1.0, batch_size=32)
+c.initialize(X=imgs, finetune_iters=200, layerwise_pretrain_iters=100)
+outp = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
+
 
 
 #print("PREDICTED CLASS 0")
