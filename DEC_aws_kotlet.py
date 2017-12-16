@@ -57,24 +57,25 @@ preds = probs_preds[1]
 
 
 def find_best_cutoff(probs, y):
-    best_acc = 0
-    best_cutoff = 0
-    for cutoff_int in range(1, 101, 1):
-        cutoff = cutoff_int / 100
+    best_acc = 0.0
+    best_cutoff = 0.0
+    for cutoff_int in range(1, 10001, 1):
+        cutoff = cutoff_int / 10000
 
         cutoff_preds = np.asarray([1 if x[0] >= cutoff else 0 for x in probs])
         cutoff_acc = sum(cutoff_preds == y) / len(y)
-        best_acc = cutoff_acc if cutoff_acc > best_acc else best_acc
-        best_cutoff = cutoff if cutoff_acc > best_acc else best_cutoff
+        if cutoff_acc > best_acc:
+            best_acc = cutoff_acc
+            best_cutoff = cutoff
 
     print("best acc: " + str(best_acc))
     print("best cutoff: " + str(best_cutoff))
 
 find_best_cutoff(probs, y)
 
-save_img_count=20
+save_img_count=30
 
-"""args = np.argsort(probs, axis=0).flatten()
+args = np.argsort(probs, axis=0).flatten()
 
 worst = args[0:save_img_count-1]
 best = args[-save_img_count-1:]
@@ -92,7 +93,7 @@ def save_imgs(probs, paths, dir):
 
 save_imgs(probs[worst].flatten(), np.asarray(img_paths)[worst], "Worst")
 save_imgs(probs[best].flatten(), np.asarray(img_paths)[best], "Best")
-"""
+
 
 end = time.time()
 print("Elapsed time: " + str(end - start))
