@@ -16,16 +16,16 @@ start = time.time()
 #img_paths = glob.glob("./Kotelet/*/*.png")
 cuts_o = glob.glob("./Kotelet/Cut/*.png")
 normals_o = glob.glob("./Kotelet/Normal/*.png")
-gloves_o = glob.glob("./Kotelet/Glove/*.png")
+#gloves_o = glob.glob("./Kotelet/Glove/*.png")
 cuts_e = glob.glob("./Kotelee/Cut/*.png")
 normals_e = glob.glob("./Kotelee/Normal/*.png")
-gloves_e = glob.glob("./Kotelee/Glove/*.png")
+#gloves_e = glob.glob("./Kotelee/Glove/*.png")
 
-img_paths_o = cuts_o + normals_o + gloves_o
-img_paths_e = cuts_e + normals_e + gloves_e
+img_paths_o = cuts_o + normals_o
+img_paths_e = cuts_e + normals_e
 img_paths = img_paths_o + img_paths_e
 
-greyscale = False
+greyscale = True
 dim = 60
 dim_flat = dim*dim if greyscale else dim*dim*3
 
@@ -48,7 +48,7 @@ y = np.asarray(y_o + y_e)
 #
 
 # AWS
-c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=dim_flat, alpha=1.0, batch_size=64)
+c = keras_dec.DeepEmbeddingClustering(n_clusters=1, input_dim=dim_flat, alpha=1.0, batch_size=256)
 c.initialize(X=imgs, finetune_iters=10000, layerwise_pretrain_iters=5000)
 probs_preds = c.cluster(X=imgs, y=y, tol=0.01, update_interval=0, iter_max=0, save_interval=0, cutoff=0.50)
 
