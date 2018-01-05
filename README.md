@@ -3,6 +3,12 @@
 This project is about applying unsupervised deep learning for food industry automation, see UnsupervisedDeepEmbeddingForClusteringAndAnomalyDetection.pdf.
 
 ### Abstract
-Currently in food industry most quality assurance tasks areperformed manually by workers.  Since most of these tasksinvolve  visual  assessment  they  are  good  candidates  to  beautomated  through  machine  learning.   This  project  investi-gates an unsupervised deep learning approach for clusteringand anomaly detection on images of pork chops.  Clusteringbased on Unsupervised Deep Embedding for Clustering Anal-ysis was applied, and modifications to the base algorithm foranomaly detection were implemented.   Clustering approachdid  not  achieve  significant  performance,  2-class  anomalydetector achieved 10% accuracy increase over the naive base-line.   Results suggest that for this problem an unsupervisedapproach is unlikely to achieve comparable performance withsupervised methods.
+Currently in food industry most quality assurance tasks are performed manually by workers.  Since most of these tasks involve  visual  assessment  they  are  good  candidates  to  be automated  through  machine  learning.   This  project  investigates an unsupervised deep learning approach for clustering and anomaly detection on images of pork chops.  Clustering based on Unsupervised Deep Embedding for Clustering Analysis was applied, and modifications to the base algorithm for anomaly detection were implemented.   Clustering approach did  not  achieve  significant  performance,  2-class  anomaly detector achieved 10% accuracy increase over the naive baseline.   Results suggest that for this problem an unsupervised approach is unlikely to achieve comparable performance withsupervised methods.
 
-### 
+### Logs
+
+two_class_anomaly_detector.log is the output for the 2-class detector achieving 76+% accuracy when best possible cutoff value is chosen, 74+% when selecting cutoff via some unsupervised means.
+
+mnist_orig_log is the output from reproducing 84% unsupervised clustering accuracy on MNIST referenced in the original DEC paper.
+
+Original DEC code from https://github.com/fferroni/DEC-Keras
